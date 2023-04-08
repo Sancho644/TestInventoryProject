@@ -6,13 +6,19 @@
 
     public class InventoryAddComponent : MonoBehaviour
     {
-        [InventoryId] [SerializeField] private string _id;
-        [SerializeField] private int _count;
+        [InventoryId] [SerializeField] private string _id = default;
+        [SerializeField] private int _count = 0;
+
+        private GameSession _session = default;
+
+        private void Start()
+        {
+            _session = GameSession.Instance;
+        }
 
         public void Add()
         {
-            var session = GameSession.Instance;
-            session.Inventory.Add(_id, _count);
+            _session.Inventory.Add(_id, _count);
         }
     }
 }

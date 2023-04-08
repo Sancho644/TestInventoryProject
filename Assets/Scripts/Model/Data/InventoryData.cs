@@ -4,11 +4,18 @@
     using UnityEngine;
     using System;
     using Scripts.Model.Definitions;
+    using System.Linq;
 
     [Serializable]
     public class InventoryData
     {
         [SerializeField] private List<InventoryItemData> _items = new List<InventoryItemData>();
+
+        public List<InventoryItemData> Items => _items;
+
+        public delegate void OnInventoryChanged(string id, int value);
+
+        public OnInventoryChanged OnChanged = default;
 
         public void Add(string id, int value)
         {
@@ -25,6 +32,8 @@
             }
 
             item.Value += value;
+
+            OnChanged?.Invoke(id, Count(id));
         }
 
         public void Remove(string id, int value)
@@ -41,6 +50,13 @@
             {
                 _items.Remove(item);
             }
+
+            OnChanged?.Invoke(id, Count(id));
+        }
+
+        public void EnableSave(List<InventoryItemData> saveList)
+        {
+            _items = saveList;
         }
 
         private InventoryItemData GetItem(string id)
@@ -54,6 +70,22 @@
             }
 
             return null;
+        }
+
+        public InventoryItemData[] GetAll(params ItemTag[] tags)
+        {
+            var retValue = new List<InventoryItemData>();
+            foreach (var item in _items)
+            {
+                var itemDef = DefsFacade.I.Items.Get(item.Id);
+                var isAllRequirementsMet = tags.All(x => itemDef.HasTag(x));
+                if (isAllRequirementsMet)
+                {
+                    retValue.Add(item);
+                }
+            }
+
+            return retValue.ToArray();
         }
 
         public int Count(string id)
