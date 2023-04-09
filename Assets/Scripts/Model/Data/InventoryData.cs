@@ -11,6 +11,8 @@
     {
         [SerializeField] private List<InventoryItemData> _items = new List<InventoryItemData>();
 
+        private bool _isFullStack = false;
+        private InventoryItemData _item = default;
         public List<InventoryItemData> Items => _items;
 
         public delegate void OnInventoryChanged(string id, int value);
@@ -24,14 +26,24 @@
             var itemDef = DefsFacade.I.Items.Get(id);
             if (itemDef.IsVoid) return;
 
-            var item = GetItem(id);
-            if (item == null)
+            _item = GetItem(id);
+
+            if (_item == null)
             {
-                item = new InventoryItemData(id);
-                _items.Add(item);
+                CreateNewItem(id);
             }
 
-            item.Value += value;
+            if (_item.Value >= itemDef.MaxStack)
+            {
+                StackIsFull(id);
+            }
+
+            if (_isFullStack)
+            {
+                CreateNewItem(id);
+            }
+
+            _item.Value += value;
 
             OnChanged?.Invoke(id, Count(id));
         }
@@ -54,9 +66,56 @@
             OnChanged?.Invoke(id, Count(id));
         }
 
+        public void RandomRemove(int value, int randomValue)
+        {
+            var id = _items[randomValue].Id;
+
+            var itemDef = DefsFacade.I.Items.Get(id);
+            if (itemDef.IsVoid) return;
+
+            var item = GetItem(id);
+            if (item == null) return;
+
+            _items[randomValue].Value -= value;
+
+            if (_items[randomValue].Value <= 0)
+            {
+                _items.Remove(_items[randomValue]);
+            }
+
+            OnChanged?.Invoke(id, Count(id));
+        }
+
         public void EnableSave(List<InventoryItemData> saveList)
         {
             _items = saveList;
+        }
+
+        private InventoryItemData StackIsFull(string id)
+        {
+            var itemDef = DefsFacade.I.Items.Get(id);
+
+            foreach (var emptyStack in _items)
+            {
+                if (emptyStack.Value < itemDef.MaxStack && emptyStack.Id == itemDef.Id)
+                {
+                    _isFullStack = false;
+
+                    return _item = emptyStack;
+                }
+                else
+                {
+                    _isFullStack = true;
+                }
+            }
+
+            return null;
+        }
+
+        private void CreateNewItem(string id)
+        {
+            _item = new InventoryItemData(id);
+            _items.Add(_item);
         }
 
         private InventoryItemData GetItem(string id)

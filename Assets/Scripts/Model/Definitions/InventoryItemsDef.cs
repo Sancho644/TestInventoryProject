@@ -11,11 +11,26 @@
 
         public ItemDef Get(string id)
         {
+            ItemDef items = default;
+
             foreach (var itemDef in _items)
             {
                 if (itemDef.Id == id)
                 {
-                    return itemDef;
+                    items = itemDef;
+                }
+            }
+
+            return items;
+        }
+
+        public ItemDef GetItemWhithTag(ItemTag tag)
+        {
+            foreach (var item in _items)
+            {
+                if (item.HasTag(tag))
+                {
+                    return item;
                 }
             }
 
@@ -32,13 +47,13 @@
     {
         [SerializeField] private string _id;
         [SerializeField] private Sprite _icon;
+        [SerializeField] private int _maxStack;
         [SerializeField] private ItemTag[] _tags;
 
         public string Id => _id;
-
-        public bool IsVoid => string.IsNullOrEmpty(_id);
-
+        public int MaxStack => _maxStack;
         public Sprite Icon => _icon;
+        public bool IsVoid => string.IsNullOrEmpty(_id);
 
         public bool HasTag(ItemTag tag)
         {

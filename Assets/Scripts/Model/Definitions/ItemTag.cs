@@ -2,6 +2,6 @@
 {
     public enum ItemTag
     {
-        Usable = 1
+        Ammo = 1
     }
 }

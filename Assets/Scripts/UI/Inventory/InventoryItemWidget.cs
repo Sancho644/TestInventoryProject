@@ -15,6 +15,15 @@
             var def = DefsFacade.I.Items.Get(item.Id);
             _icon.sprite = def.Icon;
             _value.text = item.Value.ToString();
+
+            if (item.Value > 1)
+            {
+                _value.gameObject.SetActive(true);
+            }
+            else
+            {
+                _value.gameObject.SetActive(false);
+            }
         }        
     }
 }
