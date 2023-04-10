@@ -8,11 +8,11 @@
         [SerializeField] private int _currentCoins = 5;
         [SerializeField] private int _unlockPrice = 10;
         [SerializeField] private Button _button = default;
-        [SerializeField] private InventorySlot[] _slots = default;
+        [SerializeField] private InventorySlot[] _lockedSlots = default;
 
         private void Awake()
         {
-            foreach (var slot in _slots)
+            foreach (var slot in _lockedSlots)
             {
                 slot.LockSlot();
             }
@@ -22,7 +22,7 @@
         {
             if (_unlockPrice <= _currentCoins)
             {
-                foreach (var slot in _slots)
+                foreach (var slot in _lockedSlots)
                 {
                     slot.ActivateSlot();
                 }

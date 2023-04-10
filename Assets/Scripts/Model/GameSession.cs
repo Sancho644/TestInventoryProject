@@ -2,17 +2,20 @@
 {
     using Scripts.Model.Data;
     using Scripts.Model.Data.Properties;
+    using Scripts.UI.Inventory;
     using UnityEngine;
 
     public class GameSession : MonoBehaviour
     {
         [SerializeField] private InventoryData _inventory = default;
+        [SerializeField] private InventorySlot[] _slots;
 
         private SaveSystem _systemData = default;
         private SaveData _inventoryData = new SaveData();
 
         public InventoryData Inventory => _inventory;
         public InventoryModel InventoryModel { get; private set; }
+        public InventorySlot[] Slots => _slots;
 
         public static GameSession Instance { get; private set; }
 

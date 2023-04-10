@@ -24,24 +24,24 @@ MonoBehaviour:
   - _id: Gun
     _icon: {fileID: 21300000, guid: 158be32ff2ccad14e8831bd617f89478, type: 3}
     _maxStack: 5
-    _tags: 
+    _tags: 03000000
   - _id: Machine gun
     _icon: {fileID: 21300000, guid: 0c7f2b30efde63b4e85506baea6e3484, type: 3}
     _maxStack: 1
-    _tags: 
+    _tags: 03000000
   - _id: Jacket
     _icon: {fileID: 21300000, guid: 62b4a2f3dff4a9a4ba03a764d5fdd006, type: 3}
     _maxStack: 2
-    _tags: 
+    _tags: 04000000
   - _id: Body armor
     _icon: {fileID: 21300000, guid: d359cffafe45e0e4c82527e85234799b, type: 3}
     _maxStack: 1
-    _tags: 
+    _tags: 04000000
   - _id: Cap
     _icon: {fileID: 21300000, guid: b53db54545fcd5747b7ba5e450c07baf, type: 3}
     _maxStack: 5
-    _tags: 
+    _tags: 02000000
   - _id: Helmet
     _icon: {fileID: 21300000, guid: 9d4ad9585d881b9469236aa4e598a8b1, type: 3}
     _maxStack: 3
-    _tags: 
+    _tags: 02000000

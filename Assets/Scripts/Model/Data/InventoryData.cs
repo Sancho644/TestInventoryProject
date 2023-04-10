@@ -13,6 +13,7 @@
 
         private bool _isFullStack = false;
         private InventoryItemData _item = default;
+
         public List<InventoryItemData> Items => _items;
 
         public delegate void OnInventoryChanged(string id, int value);
@@ -27,25 +28,35 @@
             if (itemDef.IsVoid) return;
 
             _item = GetItem(id);
+            _isFullStack = false;
 
-            if (_item == null)
+            var emptySlots = GameSession.Instance.Slots;
+            for (int i = 0; i < emptySlots.Length; i++)
             {
-                CreateNewItem(id);
+                if (emptySlots[i].transform.childCount == 0 || !emptySlots[i].transform.GetChild(0).gameObject.activeSelf)
+                {
+                    if (_item == null)
+                    {
+                        CreateNewItem(id);
+                    }
+
+                    if (_item.Value >= itemDef.MaxStack)
+                    {
+                        StackIsFull(id);
+                    }
+
+                    if (_isFullStack)
+                    {
+                        CreateNewItem(id);
+                    }
+
+                    _item.Value += value;
+
+                    OnChanged?.Invoke(id, Count(id));
+
+                    break;
+                }
             }
-
-            if (_item.Value >= itemDef.MaxStack)
-            {
-                StackIsFull(id);
-            }
-
-            if (_isFullStack)
-            {
-                CreateNewItem(id);
-            }
-
-            _item.Value += value;
-
-            OnChanged?.Invoke(id, Count(id));
         }
 
         public void Remove(string id, int value)

@@ -2,6 +2,9 @@
 {
     public enum ItemTag
     {
-        Ammo = 1
+        Ammo = 1,
+        Head = 2,
+        Gun = 3,
+        Torso = 4
     }
 }

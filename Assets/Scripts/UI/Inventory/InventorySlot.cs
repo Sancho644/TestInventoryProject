@@ -11,6 +11,8 @@
         private DraggableItem _draggableItem = default;
         private bool _isActive = true;
 
+        public bool IsActive => _isActive;
+
         private void Start()
         {
             if (_isActive)

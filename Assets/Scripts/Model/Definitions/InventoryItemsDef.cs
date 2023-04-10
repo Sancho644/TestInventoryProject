@@ -1,6 +1,7 @@
 ﻿namespace Scripts.Model.Definitions
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
 
@@ -24,17 +25,19 @@
             return items;
         }
 
-        public ItemDef GetItemWhithTag(ItemTag tag)
+        public List<ItemDef> GetItemWhithTag(ItemTag tag)
         {
+            List<ItemDef> items = new List<ItemDef>();
+
             foreach (var item in _items)
             {
                 if (item.HasTag(tag))
                 {
-                    return item;
+                    items.Add(item);
                 }
             }
 
-            return default;
+            return items;
         }
 
 #if UNITY_EDITOR
