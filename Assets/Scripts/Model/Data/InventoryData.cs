@@ -5,6 +5,7 @@
     using System;
     using Scripts.Model.Definitions;
     using System.Linq;
+    using Scripts.UI.Inventory;
 
     [Serializable]
     public class InventoryData
@@ -13,7 +14,7 @@
 
         private bool _isFullStack = false;
         private InventoryItemData _item = default;
-        private Transform[] _inventorySlots = default;
+        private InventorySlot[] _inventorySlots = default;
 
         public List<InventoryItemData> Items => _items;
 

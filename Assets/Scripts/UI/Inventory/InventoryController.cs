@@ -7,17 +7,19 @@
 
     public class InventoryController : MonoBehaviour
     {
-        [SerializeField] private Transform[] _container = default;
-        [SerializeField] private InventoryItemWidget _prefab = default;
+        [SerializeField] private InventorySlot[] _container = default;
+        [SerializeField] private InventoryItemWidget _itemPrefab = default;
+        [SerializeField] private CreateInventorySlots _inventorySlots = default;
 
         private GameSession _session = default;
         private InventoryItemData[] _inventory = default;
         private List<InventoryItemWidget> _createdItems = new List<InventoryItemWidget>();
 
-        public Transform[] Container => _container;
+        public InventorySlot[] Container => _container;
 
         private void Start()
         {
+            _container = _inventorySlots.Slots;
             _session = GameSession.Instance;
             _session.InventoryModel.OnChanged += Rebuild;
             _session.InventoryModel.OnRemoveItem += DeleteItem;
@@ -33,7 +35,7 @@
 
             for (int i = _createdItems.Count; i < _inventory.Length; i++)
             {
-                var item = Instantiate(_prefab, _container[i]);
+                var item = Instantiate(_itemPrefab, _container[i].gameObject.transform);
                 _createdItems.Add(item);
             }
 
@@ -46,9 +48,9 @@
 
             for (int i = 0; i < _inventory.Length; i++)
             {
-                if (_container[i].childCount == 0)
+                if (_container[i].transform.childCount == 0)
                 {
-                    var item = Instantiate(_prefab, _container[i]);
+                    var item = Instantiate(_itemPrefab, _container[i].gameObject.transform);
                     _createdItems.Add(item);
 
                     break;

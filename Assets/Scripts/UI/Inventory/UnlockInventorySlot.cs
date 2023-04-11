@@ -1,5 +1,6 @@
 ﻿namespace Scripts.UI.Inventory
 {
+    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -8,14 +9,12 @@
         [SerializeField] private int _currentCoins = 5;
         [SerializeField] private int _unlockPrice = 10;
         [SerializeField] private Button _button = default;
-        [SerializeField] private InventorySlot[] _lockedSlots = default;
+        [SerializeField] private List<InventorySlot> _lockedSlots = default;
+        [SerializeField] private CreateInventorySlots _lockSlots = default;
 
         private void Awake()
         {
-            foreach (var slot in _lockedSlots)
-            {
-                slot.LockSlot();
-            }
+            _lockedSlots = _lockSlots.LockedSlots;
         }
 
         public void Unlock()
