@@ -8,7 +8,6 @@
         [SerializeField] private GameObject _lockImage = default;
 
         private GameObject _dropped = default;
-        private DraggableItem _draggableItem = default;
         private bool _isActive = true;
 
         public bool IsActive => _isActive;
@@ -26,8 +25,10 @@
             if (transform.childCount == 0 || !transform.GetChild(0).gameObject.activeSelf && _isActive)
             {
                 _dropped = eventData.pointerDrag;
-                _draggableItem = _dropped.GetComponent<DraggableItem>();
-                _draggableItem.ParentAfterDrag = transform;
+                if (_dropped.TryGetComponent(out DraggableItem draggableItem))
+                {
+                    draggableItem.ParentAfterDrag = transform;
+                }
             }
         }
 
