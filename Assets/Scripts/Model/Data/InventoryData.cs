@@ -13,12 +13,16 @@
 
         private bool _isFullStack = false;
         private InventoryItemData _item = default;
+        private Transform[] _inventorySlots = default;
 
         public List<InventoryItemData> Items => _items;
 
         public delegate void OnInventoryChanged(string id, int value);
 
         public OnInventoryChanged OnChanged = default;
+
+        public event Action OnRemove = default;
+        public event Action OnAdd = default;
 
         public void Add(string id, int value)
         {
@@ -30,18 +34,41 @@
             _item = GetItem(id);
             _isFullStack = false;
 
-            AddItemToStack(id, value, itemDef);
+            if (AddItemToStack(id, value, itemDef)) return;
 
-            var emptySlots = GameSession.Instance.Slots;
-            for (int i = 0; i < emptySlots.Length; i++)
+            _inventorySlots = GameSession.Instance.Controller.Container;
+            for (int i = 0; i < _inventorySlots.Length; i++)
             {
-                if (emptySlots[i].transform.childCount == 0 || !emptySlots[i].transform.GetChild(0).gameObject.activeSelf)
+                if (_inventorySlots[i].transform.childCount == 0 || !_inventorySlots[i].transform.GetChild(0).gameObject.activeSelf)
                 {
                     CheckItem(id, itemDef);
 
                     _item.Value += value;
 
-                    OnChanged?.Invoke(id, Count(id));
+                    OnAdd?.Invoke();
+
+                    break;
+                }
+            }
+        }
+
+        public void AddStack(string id, int value)
+        {
+            if (value <= 0) return;
+
+            var itemDef = DefsFacade.I.Items.Get(id);
+            if (itemDef.IsVoid) return;
+
+            _inventorySlots = GameSession.Instance.Controller.Container;
+            for (int i = 0; i < _inventorySlots.Length; i++)
+            {
+                if (_inventorySlots[i].transform.childCount == 0 || !_inventorySlots[i].transform.GetChild(0).gameObject.activeSelf)
+                {
+                    CreateNewItem(id);
+
+                    _item.Value += value;
+
+                    OnAdd?.Invoke();
 
                     break;
                 }
@@ -63,7 +90,7 @@
                 _items.Remove(item);
             }
 
-            OnChanged?.Invoke(id, Count(id));
+            OnRemove?.Invoke();
         }
 
         public void RandomRemove(int value, int randomValue)
@@ -83,7 +110,7 @@
                 _items.Remove(_items[randomValue]);
             }
 
-            OnChanged?.Invoke(id, Count(id));
+            OnRemove?.Invoke();
         }
 
         public void EnableSave(List<InventoryItemData> saveList)
@@ -91,8 +118,10 @@
             _items = saveList;
         }
 
-        private void AddItemToStack(string id, int value, ItemDef itemDef)
+        private bool AddItemToStack(string id, int value, ItemDef itemDef)
         {
+            bool isAdded = false;
+
             if (_item != null)
             {
                 if (_item.Value >= itemDef.MaxStack)
@@ -103,11 +132,15 @@
                 if (!_isFullStack)
                 {
                     _item.Value += value;
-                    _item.Value = Mathf.Clamp(_item.Value, 0, itemDef.MaxStack);
+                    _item.Value = Mathf.Min(_item.Value, itemDef.MaxStack);
 
-                    OnChanged?.Invoke(id, Count(id));
+                    isAdded = true;
+
+                    OnAdd?.Invoke();
                 }
             }
+
+            return isAdded;
         }
 
         private void CheckItem(string id, ItemDef itemDef)

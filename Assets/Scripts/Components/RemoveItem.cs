@@ -15,7 +15,7 @@
 
             var rand = Random.Range(0, items.Length);
 
-            _session.Inventory.Remove(items[rand].Id, items[rand].Value);
+            _session.Inventory.Remove(items[rand].Id, items[rand].Value);           
         }
     }
 }

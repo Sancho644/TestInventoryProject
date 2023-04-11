@@ -91,8 +91,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87f5013d6d06b7e4ca8df30c7a9eed55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParentAfterDrag: {fileID: 0}
   _icon: {fileID: 323947598061852635}
+  ParentAfterDrag: {fileID: 0}
 --- !u!114 &660142402498033626
 MonoBehaviour:
   m_ObjectHideFlags: 0

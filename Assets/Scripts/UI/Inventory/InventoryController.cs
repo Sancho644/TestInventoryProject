@@ -14,10 +14,15 @@
         private InventoryItemData[] _inventory = default;
         private List<InventoryItemWidget> _createdItems = new List<InventoryItemWidget>();
 
+        public Transform[] Container => _container;
+
         private void Start()
         {
             _session = GameSession.Instance;
             _session.InventoryModel.OnChanged += Rebuild;
+            _session.InventoryModel.OnRemoveItem += DeleteItem;
+            _session.InventoryModel.OnAddItem += AddItem;
+            DraggableItem.OnEndDragChanged += Rebuild;
 
             Rebuild();
         }
@@ -32,21 +37,55 @@
                 _createdItems.Add(item);
             }
 
+            UpdateItem();
+        }
+
+        private void AddItem()
+        {
+            _inventory = _session.Inventory.GetAll();
+
+            for (int i = 0; i < _inventory.Length; i++)
+            {
+                if (_container[i].childCount == 0)
+                {
+                    var item = Instantiate(_prefab, _container[i]);
+                    _createdItems.Add(item);
+
+                    break;
+                }
+            }
+
+            UpdateItem();
+        }
+
+        private void DeleteItem()
+        {
+            _inventory = _session.Inventory.GetAll();
+
+            for (int i = _inventory.Length; i < _createdItems.Count; i++)
+            {
+                Destroy(_createdItems[i].gameObject);
+                _createdItems.Remove(_createdItems[i]);
+            }
+
+            UpdateItem();
+        }
+
+        private void UpdateItem()
+        {
             for (int i = 0; i < _inventory.Length; i++)
             {
                 _createdItems[i].SetData(_inventory[i]);
                 _createdItems[i].gameObject.SetActive(true);
-            }
-
-            for (int i = _inventory.Length; i < _createdItems.Count; i++)
-            {
-                _createdItems[i].gameObject.SetActive(false);
             }
         }
 
         private void OnDestroy()
         {
             _session.InventoryModel.OnChanged -= Rebuild;
+            _session.InventoryModel.OnRemoveItem -= DeleteItem;
+            _session.InventoryModel.OnAddItem -= AddItem;
+            DraggableItem.OnEndDragChanged -= Rebuild;
         }
     }
 }

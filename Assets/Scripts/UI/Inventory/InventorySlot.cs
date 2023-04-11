@@ -23,7 +23,7 @@
 
         public void OnDrop(PointerEventData eventData)
         {
-            if (transform.childCount == 0 && _isActive)
+            if (transform.childCount == 0 || !transform.GetChild(0).gameObject.activeSelf && _isActive)
             {
                 _dropped = eventData.pointerDrag;
                 _draggableItem = _dropped.GetComponent<DraggableItem>();

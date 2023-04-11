@@ -7,15 +7,15 @@
 
     public class GameSession : MonoBehaviour
     {
+        [SerializeField] private InventoryController _controller = default;
         [SerializeField] private InventoryData _inventory = default;
-        [SerializeField] private InventorySlot[] _slots;
 
         private SaveSystem _systemData = default;
         private SaveData _inventoryData = new SaveData();
 
         public InventoryData Inventory => _inventory;
         public InventoryModel InventoryModel { get; private set; }
-        public InventorySlot[] Slots => _slots;
+        public InventoryController Controller => _controller;
 
         public static GameSession Instance { get; private set; }
 

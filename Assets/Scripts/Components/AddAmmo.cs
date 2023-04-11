@@ -13,7 +13,7 @@
             {
                 var itemId = DefsFacade.I.Items.Get(_items[i]);
                 var value = itemId.MaxStack;
-                _session.Inventory.Add(_items[i], value);
+                _session.Inventory.AddStack(_items[i], value);
             }
         }
     }
