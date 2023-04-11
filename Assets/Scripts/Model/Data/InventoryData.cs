@@ -30,25 +30,14 @@
             _item = GetItem(id);
             _isFullStack = false;
 
+            AddItemToStack(id, value, itemDef);
+
             var emptySlots = GameSession.Instance.Slots;
             for (int i = 0; i < emptySlots.Length; i++)
             {
                 if (emptySlots[i].transform.childCount == 0 || !emptySlots[i].transform.GetChild(0).gameObject.activeSelf)
                 {
-                    if (_item == null)
-                    {
-                        CreateNewItem(id);
-                    }
-
-                    if (_item.Value >= itemDef.MaxStack)
-                    {
-                        StackIsFull(id);
-                    }
-
-                    if (_isFullStack)
-                    {
-                        CreateNewItem(id);
-                    }
+                    CheckItem(id, itemDef);
 
                     _item.Value += value;
 
@@ -100,6 +89,43 @@
         public void EnableSave(List<InventoryItemData> saveList)
         {
             _items = saveList;
+        }
+
+        private void AddItemToStack(string id, int value, ItemDef itemDef)
+        {
+            if (_item != null)
+            {
+                if (_item.Value >= itemDef.MaxStack)
+                {
+                    StackIsFull(id);
+                }
+
+                if (!_isFullStack)
+                {
+                    _item.Value += value;
+                    _item.Value = Mathf.Clamp(_item.Value, 0, itemDef.MaxStack);
+
+                    OnChanged?.Invoke(id, Count(id));
+                }
+            }
+        }
+
+        private void CheckItem(string id, ItemDef itemDef)
+        {
+            if (_item == null)
+            {
+                CreateNewItem(id);
+            }
+
+            if (_item.Value >= itemDef.MaxStack)
+            {
+                StackIsFull(id);
+            }
+
+            if (_isFullStack)
+            {
+                CreateNewItem(id);
+            }
         }
 
         private InventoryItemData StackIsFull(string id)

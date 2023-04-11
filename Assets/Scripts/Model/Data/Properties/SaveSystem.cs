@@ -24,10 +24,10 @@
         public SaveData Load()
         {
             string json = "";
-            using(var reader = new StreamReader(_filePath))
+            using (var reader = new StreamReader(_filePath))
             {
                 string line;
-                while((line = reader.ReadLine()) != null)
+                while ((line = reader.ReadLine()) != null)
                 {
                     json += line;
                 }

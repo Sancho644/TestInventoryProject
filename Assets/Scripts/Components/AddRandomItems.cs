@@ -1,7 +1,6 @@
-﻿using Scripts.Model.Definitions;
-
-namespace Scripts.Components
+﻿namespace Scripts.Components
 {
+    using Scripts.Model.Definitions;
     using UnityEngine;
 
     public class AddRandomItems : BaseInventoryModify

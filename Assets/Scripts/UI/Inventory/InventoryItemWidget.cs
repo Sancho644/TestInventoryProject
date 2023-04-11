@@ -24,6 +24,6 @@
             {
                 _value.gameObject.SetActive(false);
             }
-        }        
+        }
     }
 }
