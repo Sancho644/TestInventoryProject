@@ -8,8 +8,8 @@
         [SerializeField] private int _inventorySize = 30;
         [SerializeField] private int _lockSlots = 15;
         [SerializeField] private InventorySlot _slotPrefab = default;
-        [SerializeField] private InventorySlot[] _slots = default;
 
+        private InventorySlot[] _slots = default;
         private List<InventorySlot> _lockedSlots = default;
 
         public InventorySlot[] Slots => _slots;

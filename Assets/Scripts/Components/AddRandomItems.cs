@@ -9,9 +9,9 @@
 
         public void Add()
         {
-            var gunItems = DefsFacade.I.Items.GetItemWhithTag(ItemTag.Gun);
-            var headItems = DefsFacade.I.Items.GetItemWhithTag(ItemTag.Head);
-            var torsoItems = DefsFacade.I.Items.GetItemWhithTag(ItemTag.Torso);
+            var gunItems = DefsFacade.I.Items.GetItemWithTag(ItemTag.Gun);
+            var headItems = DefsFacade.I.Items.GetItemWithTag(ItemTag.Head);
+            var torsoItems = DefsFacade.I.Items.GetItemWithTag(ItemTag.Torso);
 
             var randomGunItem = Random.Range(0, gunItems.Count);
             var randomHeadItem = Random.Range(0, headItems.Count);

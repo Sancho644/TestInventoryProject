@@ -25,7 +25,7 @@
             return items;
         }
 
-        public List<ItemDef> GetItemWhithTag(ItemTag tag)
+        public List<ItemDef> GetItemWithTag(ItemTag tag)
         {
             List<ItemDef> items = new List<ItemDef>();
 
@@ -41,7 +41,7 @@
         }
 
 #if UNITY_EDITOR
-        public ItemDef[] ItemsForEdotor => _items;
+        public ItemDef[] ItemsForEditor => _items;
 #endif
     }
 
